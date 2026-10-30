@@ -6,21 +6,32 @@ export const AmbientSound: React.FC<{ className?: string }> = ({ className = '' 
   const audioCtxRef = useRef<AudioContext | null>(null);
   const gainNodeRef = useRef<GainNode | null>(null);
   const noiseSourceRef = useRef<AudioNode | null>(null);
+  const stopTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const startAudio = () => {
+  const startAudio = async () => {
     try {
+      if (stopTimeoutRef.current) {
+        clearTimeout(stopTimeoutRef.current);
+        stopTimeoutRef.current = null;
+      }
+
       const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
       const ctx = new AudioCtx();
       audioCtxRef.current = ctx;
 
+      // Handle mobile browser audio context suspension
+      if (ctx.state === 'suspended') {
+        await ctx.resume();
+      }
+
       // Master Gain for subtle gentle volume
       const masterGain = ctx.createGain();
       masterGain.gain.setValueAtTime(0.001, ctx.currentTime);
-      masterGain.gain.exponentialRampToValueAtTime(0.04, ctx.currentTime + 2);
+      masterGain.gain.exponentialRampToValueAtTime(0.04, ctx.currentTime + 1.5);
       masterGain.connect(ctx.destination);
       gainNodeRef.current = masterGain;
 
-      // 1. Soft Pink Noise generator (simulates warm distant café murmur/room tone)
+      // Soft Pink Noise generator (simulates warm distant café murmur/room tone)
       const bufferSize = ctx.sampleRate * 2;
       const noiseBuffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
       const output = noiseBuffer.getChannelData(0);
@@ -60,7 +71,7 @@ export const AmbientSound: React.FC<{ className?: string }> = ({ className = '' 
   const stopAudio = () => {
     if (gainNodeRef.current && audioCtxRef.current) {
       gainNodeRef.current.gain.exponentialRampToValueAtTime(0.0001, audioCtxRef.current.currentTime + 0.8);
-      setTimeout(() => {
+      stopTimeoutRef.current = setTimeout(() => {
         audioCtxRef.current?.close();
         audioCtxRef.current = null;
         setIsPlaying(false);
@@ -80,15 +91,17 @@ export const AmbientSound: React.FC<{ className?: string }> = ({ className = '' 
 
   useEffect(() => {
     return () => {
+      if (stopTimeoutRef.current) clearTimeout(stopTimeoutRef.current);
       audioCtxRef.current?.close();
     };
   }, []);
 
   return (
     <button
+      type="button"
       onClick={toggleSound}
       title={isPlaying ? 'Mute gentle café ambience' : 'Play relaxing café ambiance'}
-      className={`inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium transition-all duration-300 ${
+      className={`inline-flex items-center gap-2 px-3 py-1.5 min-h-[38px] rounded-full text-xs font-medium transition-all duration-300 touch-manipulation ${
         isPlaying
           ? 'bg-coffee/20 text-coffee-dark border border-coffee/40 shadow-sm'
           : 'bg-ivory/80 text-charcoal/80 hover:text-forest border border-beige/60 hover:border-forest/40'

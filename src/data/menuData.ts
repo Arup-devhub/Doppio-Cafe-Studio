@@ -356,39 +356,6 @@ export const MENU_ITEMS: MenuItem[] = [
   }
 ];
 
-export const BUSINESS_INFO = {
-  name: "Doppio Cafe & Studio",
-  address: "Plot 3, Infocity Avenue, Patia, Bhubaneswar, Odisha 751024",
-  landmark: "Near Infocity Square & Aangan Convention, Patia Tech Hub",
-  phone: "+91 74400 24446",
-  phoneDisplay: "+91 74400 24446",
-  email: "connect@doppiocafe.in",
-  instagram: "https://www.instagram.com/doppio_coffee_studio/",
-  instagramHandle: "@doppio_coffee_studio",
-  googleMapsUrl: "https://www.google.com/maps/place/Doppio+Cafe+%26+Studio/@20.3430495,85.8097024,17z",
-  googleMapsEmbed: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.9653636290853!2d85.80712747596859!3d20.343049511019685!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909ea639fe209%3A0xaa162841f60bca2d!2sDoppio%20Cafe%20%26%20Studio!5e0!3m2!1sen!2sin!4v1730248000000!5m2!1sen!2sin",
-  coordinates: {
-    lat: 20.3430495,
-    lng: 85.8097024
-  },
-  openingHours: {
-    display: "10:00 AM – 10:00 PM",
-    days: "Every Day (Monday – Sunday)",
-    openHour: 10,
-    closeHour: 22
-  },
-  pricing: "₹1,000 for two approx.",
-  features: [
-    "Botanical Open-Air Courtyard",
-    "Specialty Espresso & Artisan Brews",
-    "Italian & Continental Bistro Fare",
-    "Studio Book Nook & Literature Corner",
-    "Air-Conditioned Lounge with Honeycomb Ceiling",
-    "Pet-Friendly Outdoor Patio",
-    "High-Speed Wi-Fi & Work Friendly",
-    "Dine-in, Takeaway & Swiggy Dineout"
-  ],
-  tagline: "Good Food, Great Coffee, Greenery Overhead and Cozy Conversations.",
-  heroHeadline: "Your Everyday Escape, Perfectly Brewed.",
-  heroSubhead: "Good coffee, beautiful spaces, and memorable moments. Welcome to Doppio Cafe & Studio."
-};
+// Re-export centralized business info
+export { BUSINESS_INFO, BUSINESS_CONFIG } from './business';
+

@@ -17,12 +17,35 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 40);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  // Lock background scrolling when mobile menu drawer is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  // Handle Escape key to close mobile drawer
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
 
   const navLinks = [
     { label: 'Home', href: '#hero' },
@@ -118,10 +141,12 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
 
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className={`p-2.5 rounded-xl transition-colors ${
-                  isScrolled ? 'text-charcoal bg-beige/30' : 'text-ivory bg-ivory/15'
+                className={`min-w-[44px] min-h-[44px] p-2.5 rounded-xl transition-colors flex items-center justify-center ${
+                  isScrolled ? 'text-charcoal bg-beige/30 hover:bg-beige/50' : 'text-ivory bg-ivory/15 hover:bg-ivory/25'
                 }`}
-                aria-label="Toggle navigation menu"
+                aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-nav-drawer"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -134,6 +159,10 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            id="mobile-nav-drawer"
+            role="dialog"
+            aria-modal="true"
+            aria-label="Mobile Navigation"
             initial={{ opacity: 0, x: '100%' }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: '100%' }}
@@ -142,11 +171,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
           >
             <div>
               {/* Drawer Header */}
-              <div className="flex items-center justify-between pb-6 border-b border-ivory/10">
+              <div className="flex items-center justify-between pb-5 border-b border-ivory/10">
                 <Logo variant="light" size="sm" />
                 <button
                   onClick={() => setMobileMenuOpen(false)}
-                  className="p-2 rounded-full bg-ivory/10 text-ivory hover:bg-ivory/20"
+                  className="min-w-[44px] min-h-[44px] p-2 rounded-full bg-ivory/10 text-ivory hover:bg-ivory/20 flex items-center justify-center transition-colors"
                   aria-label="Close menu"
                 >
                   <X className="w-6 h-6" />
@@ -154,18 +183,18 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
               </div>
 
               {/* Status Badge in mobile */}
-              <div className="mt-6 mb-4">
+              <div className="mt-5 mb-3">
                 <LiveStatusBadge />
               </div>
 
-              {/* Navigation Links */}
-              <nav className="flex flex-col space-y-4 my-6">
+              {/* Navigation Links with 48px touch targets */}
+              <nav className="flex flex-col space-y-1 my-4">
                 {navLinks.map((link) => (
                   <a
                     key={link.label}
                     href={link.href}
                     onClick={(e) => handleLinkClick(e, link.href)}
-                    className="text-xl font-serif text-ivory/90 hover:text-gold-accent transition-colors py-1 flex items-center justify-between"
+                    className="min-h-[48px] text-lg font-serif text-ivory/90 hover:text-gold-accent active:text-gold-warm transition-colors py-2.5 px-2 rounded-lg hover:bg-ivory/5 flex items-center justify-between"
                   >
                     <span>{link.label}</span>
                     <ArrowRight className="w-4 h-4 opacity-40" />
@@ -175,22 +204,22 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
             </div>
 
             {/* Drawer Footer Actions */}
-            <div className="pt-6 border-t border-ivory/10 space-y-4">
+            <div className="pt-5 border-t border-ivory/10 space-y-3.5">
               <button
                 onClick={() => {
                   setMobileMenuOpen(false);
                   onOpenReservation();
                 }}
-                className="w-full py-3.5 rounded-xl bg-ivory text-forest font-semibold text-sm tracking-wide uppercase hover:bg-beige transition shadow-lg flex items-center justify-center gap-2"
+                className="w-full min-h-[48px] py-3.5 rounded-xl bg-ivory text-forest font-semibold text-xs tracking-wider uppercase hover:bg-beige transition shadow-lg flex items-center justify-center gap-2 active:scale-95"
               >
-                <Calendar className="w-4 h-4" />
+                <Calendar className="w-4 h-4 text-forest" />
                 <span>Reserve a Table</span>
               </button>
 
-              <div className="flex items-center justify-between gap-3 text-xs text-beige/80 pt-2">
+              <div className="flex items-center justify-between gap-3 text-xs text-beige/80 pt-1">
                 <a
                   href={`tel:${BUSINESS_INFO.phone}`}
-                  className="flex items-center gap-1.5 hover:text-ivory"
+                  className="min-h-[44px] flex items-center gap-1.5 hover:text-ivory active:text-gold-warm"
                 >
                   <Phone className="w-3.5 h-3.5 text-gold-accent" />
                   <span>{BUSINESS_INFO.phoneDisplay}</span>
@@ -200,7 +229,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onOpenReservation }) => {
                   href={BUSINESS_INFO.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 hover:text-ivory"
+                  className="min-h-[44px] flex items-center gap-1.5 hover:text-ivory active:text-gold-warm"
                 >
                   <InstagramIcon className="w-3.5 h-3.5 text-gold-accent" />
                   <span>{BUSINESS_INFO.instagramHandle}</span>

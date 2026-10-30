@@ -1,8 +1,7 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Coffee, Search, Sparkles, Filter, Eye, Utensils, Award, Download, Check } from 'lucide-react';
+import { Coffee, Search, Eye, Utensils, Download, X } from 'lucide-react';
 import { MENU_CATEGORIES, MENU_ITEMS } from '../../data/menuData';
-import { MenuItem } from '../../types';
 
 interface SignatureMenuProps {
   onImageClick?: (item: { id: string; src: string; title: string; description?: string }) => void;
@@ -14,6 +13,29 @@ export const SignatureMenu: React.FC<SignatureMenuProps> = ({ onImageClick, onOp
   const [dietaryFilter, setDietaryFilter] = useState<'all' | 'veg' | 'non-veg' | 'beverage'>('all');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [showFullMenuModal, setShowFullMenuModal] = useState<boolean>(false);
+
+  // Lock background scroll when full menu modal is open
+  useEffect(() => {
+    if (showFullMenuModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [showFullMenuModal]);
+
+  // Handle Escape key
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showFullMenuModal) {
+        setShowFullMenuModal(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [showFullMenuModal]);
 
   // Filter items
   const filteredItems = useMemo(() => {
@@ -123,7 +145,7 @@ export const SignatureMenu: React.FC<SignatureMenuProps> = ({ onImageClick, onOp
           </p>
         </div>
 
-        {/* Menu Items Grid */}
+        {/* Menu Items Grid - Balanced layout for 1, 2, or 3+ items */}
         {filteredItems.length === 0 ? (
           <div className="text-center py-16 bg-ivory rounded-3xl border border-dashed border-beige">
             <Utensils className="w-10 h-10 text-charcoal/30 mx-auto mb-3" />
@@ -141,7 +163,13 @@ export const SignatureMenu: React.FC<SignatureMenuProps> = ({ onImageClick, onOp
         ) : (
           <motion.div
             layout
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+            className={`grid gap-5 sm:gap-6 ${
+              filteredItems.length === 1
+                ? 'grid-cols-1 max-w-md mx-auto sm:mx-0'
+                : filteredItems.length === 2
+                ? 'grid-cols-1 sm:grid-cols-2 max-w-3xl'
+                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-3'
+            }`}
           >
             {filteredItems.map((item) => (
               <motion.div
@@ -169,6 +197,10 @@ export const SignatureMenu: React.FC<SignatureMenuProps> = ({ onImageClick, onOp
                       <img
                         src={item.image}
                         alt={item.name}
+                        width={400}
+                        height={250}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-full object-cover transition-transform duration-500 group-hover/img:scale-105"
                       />
                       <div className="absolute inset-0 bg-charcoal/20 opacity-0 group-hover/img:opacity-100 transition-opacity flex items-center justify-center">
@@ -282,68 +314,77 @@ export const SignatureMenu: React.FC<SignatureMenuProps> = ({ onImageClick, onOp
       {/* Full Menu Modal */}
       <AnimatePresence>
         {showFullMenuModal && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-charcoal/80 backdrop-blur-md overflow-y-auto">
+          <div
+            className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-6 bg-charcoal/80 backdrop-blur-md overflow-y-auto"
+            onClick={() => setShowFullMenuModal(false)}
+          >
             <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              className="relative w-full max-w-3xl bg-ivory rounded-3xl shadow-2xl border border-beige p-6 sm:p-10 my-8 max-h-[85vh] overflow-y-auto"
+              role="dialog"
+              aria-modal="true"
+              aria-label="Full Bistro Menu Overview"
+              initial={{ opacity: 0, scale: 0.95, y: 15 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 15 }}
+              transition={{ duration: 0.2 }}
+              onClick={(e) => e.stopPropagation()}
+              className="relative w-full max-w-3xl bg-ivory rounded-2xl sm:rounded-3xl shadow-2xl border border-beige p-5 sm:p-8 md:p-10 my-auto max-h-[88dvh] flex flex-col"
             >
-              <div className="flex items-center justify-between pb-4 border-b border-beige">
+              <div className="flex items-center justify-between pb-4 border-b border-beige flex-shrink-0">
                 <div>
                   <span className="text-[10px] uppercase font-bold tracking-widest text-coffee">
                     Doppio Cafe & Studio
                   </span>
-                  <h3 className="font-serif text-2xl sm:text-3xl font-bold text-forest">
+                  <h3 className="font-serif text-xl sm:text-3xl font-bold text-forest">
                     Full Bistro Menu Overview
                   </h3>
                 </div>
                 <button
                   onClick={() => setShowFullMenuModal(false)}
-                  className="p-2 rounded-full bg-beige/40 hover:bg-beige text-charcoal transition"
+                  className="min-w-[44px] min-h-[44px] p-2 rounded-full bg-beige/40 hover:bg-beige text-charcoal transition flex items-center justify-center active:scale-95"
+                  aria-label="Close full menu modal"
                 >
-                  ✕
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
-              <div className="py-6 space-y-8">
+              <div className="py-5 sm:py-6 space-y-6 sm:space-y-8 overflow-y-auto flex-grow pr-1">
                 {MENU_CATEGORIES.map((cat) => {
                   const catItems = MENU_ITEMS.filter((i) => i.category === cat.id);
                   if (catItems.length === 0) return null;
                   return (
                     <div key={cat.id}>
-                      <div className="flex items-center gap-2 mb-3">
+                      <div className="flex items-center gap-2 mb-2 sm:mb-3">
                         <span className="w-4 h-0.5 bg-coffee" />
-                        <h4 className="font-serif text-lg font-bold text-forest uppercase tracking-wider">
+                        <h4 className="font-serif text-base sm:text-lg font-bold text-forest uppercase tracking-wider">
                           {cat.name}
                         </h4>
                       </div>
 
                       <div className="divide-y divide-beige/40">
                         {catItems.map((item) => (
-                          <div key={item.id} className="py-2.5 flex items-start justify-between gap-4">
-                            <div>
-                              <div className="flex items-center gap-2">
-                                <span className="font-serif font-semibold text-sm text-charcoal">
+                          <div key={item.id} className="py-2.5 flex items-start justify-between gap-3 sm:gap-4">
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+                                <span className="font-serif font-semibold text-xs sm:text-sm text-charcoal">
                                   {item.name}
                                 </span>
                                 {item.signature && (
-                                  <span className="text-[9px] font-bold text-gold-accent uppercase bg-gold-accent/10 px-1.5 py-0.5 rounded">
+                                  <span className="text-[8px] sm:text-[9px] font-bold text-gold-accent uppercase bg-gold-accent/10 px-1.5 py-0.5 rounded">
                                     Signature
                                   </span>
                                 )}
                               </div>
-                              <p className="text-xs text-charcoal/60 font-light mt-0.5">
+                              <p className="text-[11px] sm:text-xs text-charcoal/60 font-light mt-0.5 leading-relaxed">
                                 {item.description}
                               </p>
                             </div>
-                            <div className="text-right flex-shrink-0">
+                            <div className="text-right flex-shrink-0 pt-0.5">
                               {item.price ? (
-                                <span className="font-mono text-sm font-bold text-forest">
+                                <span className="font-mono text-xs sm:text-sm font-bold text-forest">
                                   ₹{item.price}
                                 </span>
                               ) : (
-                                <span className="text-xs text-charcoal/40">Market</span>
+                                <span className="text-[10px] sm:text-xs text-charcoal/40">Market</span>
                               )}
                             </div>
                           </div>
@@ -354,11 +395,11 @@ export const SignatureMenu: React.FC<SignatureMenuProps> = ({ onImageClick, onOp
                 })}
               </div>
 
-              <div className="pt-4 border-t border-beige flex items-center justify-between text-xs text-charcoal/60">
-                <span>Prices inclusive of applicable taxes • Service charges discretionary</span>
+              <div className="pt-3 sm:pt-4 border-t border-beige flex flex-col sm:flex-row items-center justify-between gap-2.5 text-[11px] sm:text-xs text-charcoal/60 flex-shrink-0">
+                <span className="text-center sm:text-left">Prices inclusive of taxes • Prepared fresh to order</span>
                 <button
                   onClick={() => window.print()}
-                  className="px-4 py-2 rounded-xl bg-ivory-200 hover:bg-beige text-charcoal font-medium border border-beige flex items-center gap-1.5"
+                  className="px-4 py-2 rounded-xl bg-ivory-200 hover:bg-beige text-charcoal font-medium border border-beige flex items-center gap-1.5 active:scale-95"
                 >
                   <Download className="w-3.5 h-3.5" />
                   <span>Print Menu</span>

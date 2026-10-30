@@ -9,10 +9,10 @@ interface LocationContactProps {
 
 export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservation }) => {
   return (
-    <section id="location" className="relative py-24 sm:py-32 bg-ivory text-charcoal">
+    <section id="location" className="relative py-16 sm:py-24 lg:py-32 bg-ivory text-charcoal">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="text-center max-w-3xl mx-auto mb-16">
+        <div className="text-center max-w-3xl mx-auto mb-12 sm:mb-16">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-widest bg-forest/10 text-forest mb-4">
             <MapPin className="w-3.5 h-3.5 text-forest" />
             <span>Infocity Avenue, Patia</span>
@@ -30,8 +30,8 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
         {/* Content Grid: Contact Details & Embedded Map */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
           {/* Left Column: Business Card Details */}
-          <div className="lg:col-span-5 flex flex-col justify-between bg-ivory-100 p-8 sm:p-10 rounded-3xl border border-beige shadow-sm space-y-8">
-            <div className="space-y-6">
+          <div className="lg:col-span-5 flex flex-col justify-between bg-ivory-100 p-5 sm:p-8 lg:p-10 rounded-3xl border border-beige shadow-sm space-y-6 sm:space-y-8">
+            <div className="space-y-5 sm:space-y-6">
               {/* Live Status Pill */}
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold uppercase tracking-widest text-coffee">
@@ -41,12 +41,12 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
               </div>
 
               {/* Address */}
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-forest/10 flex items-center justify-center flex-shrink-0 text-forest mt-1">
+              <div className="flex items-start gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 rounded-xl bg-forest/10 flex items-center justify-center flex-shrink-0 text-forest mt-0.5">
                   <MapPin className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-forest">Address</h4>
+                  <h4 className="font-serif text-base sm:text-lg font-bold text-forest">Address</h4>
                   <p className="text-sm text-charcoal/80 font-light leading-relaxed mt-1">
                     {BUSINESS_INFO.address}
                   </p>
@@ -60,12 +60,12 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
               </div>
 
               {/* Opening Hours */}
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-coffee/10 flex items-center justify-center flex-shrink-0 text-coffee mt-1">
+              <div className="flex items-start gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 rounded-xl bg-coffee/10 flex items-center justify-center flex-shrink-0 text-coffee mt-0.5">
                   <Clock className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-forest">Opening Hours</h4>
+                  <h4 className="font-serif text-base sm:text-lg font-bold text-forest">Opening Hours</h4>
                   <p className="text-sm font-semibold text-charcoal/90 mt-1">
                     {BUSINESS_INFO.openingHours.display}
                   </p>
@@ -76,15 +76,15 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
               </div>
 
               {/* Phone & Direct Call */}
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-forest-light/10 flex items-center justify-center flex-shrink-0 text-forest-light mt-1">
+              <div className="flex items-start gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 rounded-xl bg-forest-light/10 flex items-center justify-center flex-shrink-0 text-forest-light mt-0.5">
                   <Phone className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-forest">Phone & Inquiries</h4>
+                  <h4 className="font-serif text-base sm:text-lg font-bold text-forest">Phone & Inquiries</h4>
                   <a
                     href={`tel:${BUSINESS_INFO.phone}`}
-                    className="text-base font-bold text-forest hover:text-coffee transition-colors block mt-1"
+                    className="text-base font-bold text-forest hover:text-coffee transition-colors inline-block mt-1 min-h-[36px] flex items-center"
                   >
                     {BUSINESS_INFO.phoneDisplay}
                   </a>
@@ -95,17 +95,17 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
               </div>
 
               {/* Social Media Link */}
-              <div className="flex items-start gap-4">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0 text-rose-700 mt-1">
+              <div className="flex items-start gap-3.5 sm:gap-4">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center flex-shrink-0 text-rose-700 mt-0.5">
                   <InstagramIcon className="w-5 h-5" />
                 </div>
                 <div>
-                  <h4 className="font-serif text-lg font-bold text-forest">Official Instagram</h4>
+                  <h4 className="font-serif text-base sm:text-lg font-bold text-forest">Official Instagram</h4>
                   <a
                     href={BUSINESS_INFO.instagram}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm font-semibold text-forest hover:text-rose-700 transition-colors inline-flex items-center gap-1.5 mt-1"
+                    className="text-sm font-semibold text-forest hover:text-rose-700 transition-colors inline-flex items-center gap-1.5 mt-1 min-h-[36px]"
                   >
                     <span>{BUSINESS_INFO.instagramHandle}</span>
                     <ExternalLink className="w-3.5 h-3.5 opacity-60" />
@@ -123,15 +123,16 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
                 href={BUSINESS_INFO.googleMapsUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-forest text-ivory font-semibold text-xs tracking-wider uppercase hover:bg-forest-light transition shadow-md"
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 min-h-[48px] rounded-xl bg-forest text-ivory font-semibold text-xs tracking-wider uppercase hover:bg-forest-light transition shadow-md touch-manipulation active:scale-[0.98]"
               >
                 <Navigation className="w-4 h-4 text-gold-accent" />
                 <span>Get Directions</span>
               </a>
 
               <button
+                type="button"
                 onClick={onOpenReservation}
-                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-ivory-200 border border-beige text-charcoal font-semibold text-xs tracking-wider uppercase hover:bg-beige transition"
+                className="flex-1 flex items-center justify-center gap-2 px-5 py-3.5 min-h-[48px] rounded-xl bg-ivory-200 border border-beige text-charcoal font-semibold text-xs tracking-wider uppercase hover:bg-beige transition touch-manipulation active:scale-[0.98]"
               >
                 <Calendar className="w-4 h-4 text-coffee" />
                 <span>Table Enquiry</span>
@@ -141,7 +142,7 @@ export const LocationContact: React.FC<LocationContactProps> = ({ onOpenReservat
 
           {/* Right Column: Embedded Interactive Google Map */}
           <div className="lg:col-span-7 flex flex-col">
-            <div className="relative w-full h-[420px] sm:h-[480px] lg:h-full min-h-[420px] rounded-3xl overflow-hidden shadow-luxury border border-beige bg-ivory-200">
+            <div className="relative w-full h-[320px] sm:h-[420px] lg:h-full min-h-[320px] rounded-3xl overflow-hidden shadow-luxury border border-beige bg-ivory-200">
               <iframe
                 title="Doppio Cafe & Studio Google Map Location"
                 src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3740.9653636290853!2d85.80712747596859!3d20.343049511019685!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3a1909ea639fe209%3A0xaa162841f60bca2d!2sDoppio%20Cafe%20%26%20Studio!5e0!3m2!1sen!2sin!4v1730248000000!5m2!1sen!2sin"

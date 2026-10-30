@@ -36,15 +36,15 @@ export const Experience: React.FC<ExperienceProps> = ({ onImageClick, onOpenRese
           </p>
         </div>
 
-        {/* Interactive Space Selectors */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-12">
+        {/* Interactive Space Selectors - Horizontal Swipe on Mobile, Grid on Tablet/Desktop */}
+        <div className="flex md:grid md:grid-cols-4 gap-2.5 sm:gap-3 overflow-x-auto pb-3 md:pb-0 mb-8 sm:mb-12 scrollbar-none snap-x">
           {EXPERIENCE_PILLARS.map((pillar) => {
             const isSelected = pillar.id === activePillarId;
             return (
               <button
                 key={pillar.id}
                 onClick={() => setActivePillarId(pillar.id)}
-                className={`p-4 rounded-2xl text-left transition-all duration-300 border ${
+                className={`flex-shrink-0 w-[240px] md:w-auto p-3.5 sm:p-4 rounded-xl sm:rounded-2xl text-left transition-all duration-300 border snap-start active:scale-95 ${
                   isSelected
                     ? 'bg-ivory text-forest border-ivory shadow-lg scale-102'
                     : 'bg-ivory/10 text-ivory hover:bg-ivory/15 border-ivory/15'
@@ -68,8 +68,8 @@ export const Experience: React.FC<ExperienceProps> = ({ onImageClick, onOpenRese
           key={activePillar.id}
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
-          className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center bg-forest-dark/80 p-6 sm:p-10 rounded-3xl border border-beige/20 shadow-2xl"
+          transition={{ duration: 0.4 }}
+          className="grid grid-cols-1 lg:grid-cols-12 gap-6 sm:gap-8 lg:gap-12 items-center bg-forest-dark/80 p-5 sm:p-8 lg:p-10 rounded-2xl sm:rounded-3xl border border-beige/20 shadow-2xl"
         >
           {/* Left: Authentic Photography */}
           <div className="lg:col-span-7">
@@ -82,47 +82,51 @@ export const Experience: React.FC<ExperienceProps> = ({ onImageClick, onOpenRese
                   description: activePillar.description,
                 })
               }
-              className="relative rounded-2xl overflow-hidden aspect-[16/10] sm:aspect-[16/10] bg-black/40 shadow-xl cursor-pointer group border border-ivory/10"
+              className="relative rounded-xl sm:rounded-2xl overflow-hidden aspect-[16/10] bg-black/40 shadow-xl cursor-pointer group border border-ivory/10"
             >
               <img
                 src={activePillar.image}
                 alt={activePillar.title}
+                width={700}
+                height={440}
+                loading="lazy"
+                decoding="async"
                 className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-transparent to-transparent flex items-end justify-between p-6">
+              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-transparent to-transparent flex items-end justify-between p-4 sm:p-6">
                 <div>
-                  <span className="text-xs uppercase tracking-widest text-gold-warm font-semibold">
+                  <span className="text-[10px] sm:text-xs uppercase tracking-widest text-gold-warm font-semibold">
                     Real Café Ambience
                   </span>
-                  <p className="font-serif text-lg sm:text-xl font-bold text-ivory">
+                  <p className="font-serif text-base sm:text-xl font-bold text-ivory">
                     {activePillar.title}
                   </p>
                 </div>
-                <span className="text-xs text-beige/80 px-3 py-1 rounded-full bg-ivory/15 backdrop-blur-md border border-ivory/20">
-                  Click to Expand
+                <span className="text-[10px] sm:text-xs text-beige/80 px-2.5 py-1 rounded-full bg-ivory/15 backdrop-blur-md border border-ivory/20 flex-shrink-0">
+                  Tap to Zoom
                 </span>
               </div>
             </div>
           </div>
 
           {/* Right: Editorial Narrative & Highlights */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-4 sm:space-y-6">
             <div>
-              <span className="text-xs uppercase font-mono tracking-widest text-gold-accent font-semibold">
+              <span className="text-[10px] sm:text-xs uppercase font-mono tracking-widest text-gold-accent font-semibold">
                 {activePillar.subtitle}
               </span>
-              <h3 className="font-serif text-2xl sm:text-3xl font-bold text-ivory mt-1">
+              <h3 className="font-serif text-xl sm:text-3xl font-bold text-ivory mt-1">
                 {activePillar.title}
               </h3>
             </div>
 
-            <p className="text-sm sm:text-base text-beige/90 font-light leading-relaxed">
+            <p className="text-xs sm:text-base text-beige/90 font-light leading-relaxed">
               {activePillar.description}
             </p>
 
-            <div className="space-y-2.5 pt-2">
+            <div className="space-y-2 pt-1 sm:pt-2">
               {activePillar.highlights.map((h, i) => (
-                <div key={i} className="flex items-center gap-3 text-xs sm:text-sm text-ivory">
+                <div key={i} className="flex items-center gap-2.5 text-xs sm:text-sm text-ivory">
                   <CheckCircle className="w-4 h-4 text-gold-warm flex-shrink-0" />
                   <span>{h}</span>
                 </div>
@@ -130,12 +134,12 @@ export const Experience: React.FC<ExperienceProps> = ({ onImageClick, onOpenRese
             </div>
 
             {onOpenReservation && (
-              <div className="pt-4">
+              <div className="pt-2 sm:pt-4">
                 <button
                   onClick={onOpenReservation}
-                  className="px-6 py-3 rounded-full bg-gold-warm text-charcoal font-semibold text-xs tracking-wider uppercase hover:bg-gold transition shadow-md flex items-center gap-2"
+                  className="w-full sm:w-auto min-h-[48px] px-6 py-3.5 rounded-full bg-gold-warm text-charcoal font-semibold text-xs tracking-wider uppercase hover:bg-gold transition shadow-md flex items-center justify-center gap-2 active:scale-95"
                 >
-                  <span>Experience This Space</span>
+                  <span>Reserve Table in This Area</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </button>
               </div>
