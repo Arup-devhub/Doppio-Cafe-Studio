@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  body {
+    background-color: #F7F3EA;
+    color: #242620;
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background-color: #263E32;
+    color: #F7F3EA;
+  }
+}
+
+/* Custom modern scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #F7F3EA;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #C4B39B;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #76513A;
+}
+
+/* Subtle editorial grain effect */
+.bg-noise {
+  background-image: radial-gradient(rgba(38, 62, 50, 0.04) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Text glow */
+.text-glow {
+  text-shadow: 0 0 20px rgba(226, 184, 85, 0.35);
+}
+
+/* Luxury card glassmorphism */
+.glass-panel {
+  background: rgba(247, 243, 234, 0.88);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(216, 203, 183, 0.4);
+}
+
+.glass-dark {
+  background: rgba(26, 44, 35, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(216, 203, 183, 0.15);
+}
