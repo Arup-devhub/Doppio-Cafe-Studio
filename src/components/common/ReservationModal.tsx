@@ -144,7 +144,6 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
                     required
                     value={formData.name}
                     onChange={handleChange}
-                    placeholder="e.g. Ananya Mohapatra"
                     className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-xl bg-ivory-100 border text-charcoal text-sm focus:outline-none transition ${
                       errors.name ? 'border-rose-500 bg-rose-50/30' : 'border-beige/80 focus:border-forest'
                     }`}
@@ -164,7 +163,6 @@ export const ReservationModal: React.FC<ReservationModalProps> = ({ isOpen, onCl
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    placeholder="+91 98765 43210"
                     className={`w-full px-3.5 py-2.5 min-h-[44px] rounded-xl bg-ivory-100 border text-charcoal text-sm focus:outline-none transition ${
                       errors.phone ? 'border-rose-500 bg-rose-50/30' : 'border-beige/80 focus:border-forest'
                     }`}
